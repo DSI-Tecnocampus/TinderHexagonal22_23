@@ -22,12 +22,12 @@ class ListProfilesController {
         return listProfiles.getAllProfiles();
     }
 
-    @GetMapping("/profiles/{email}")
+    @GetMapping("/profiles/email/{email}")
     public ProfileListing getProfileByEmail(@PathVariable String email) {
         return listProfiles.getProfileByEmail(email);
     }
 
-    @GetMapping("/profiles/{nickname}")
+    @GetMapping("/profiles/nickname/{nickname}")
     public ProfileListing getProfileByNickname(@PathVariable String nickname) {
         return listProfiles.getProfileByNickname(nickname);
     }

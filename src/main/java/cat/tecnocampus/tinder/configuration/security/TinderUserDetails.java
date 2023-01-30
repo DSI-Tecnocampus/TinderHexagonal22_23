@@ -28,7 +28,7 @@ public class TinderUserDetails implements UserDetails {
     public TinderUserDetails(Long id, String username, String email, String password,
                            Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
-        this.username = username;
+        this.username = email;
         this.email = email;
         this.password = password;
         this.authorities = authorities;

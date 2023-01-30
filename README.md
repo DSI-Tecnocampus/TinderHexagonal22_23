@@ -18,7 +18,7 @@ The domain Profile class
     * Profile listings produce a projection of profiles called ProfileListing. It's implemented as a record
   * Profile creation
     * The port/interface has one single method 
-    * Create profile receives a CreateProfileCommand. It alows to isolate the web layer from the application layer
+    * Create profile receives a CreateProfileCommand. It allows to isolate the web layer from the application layer
     * CreateProfileCommand has all the validation annotations
     * See that the port/interface has the annotations @Validation, at class level, and @Valid, at method's attribute level. 
       in this way the validation is performed within the application service implementing the port/interface 
@@ -47,6 +47,38 @@ The domain Profile class
     going thogh any domain object. This happens because the domain has no logic in the process of profile creation.
 
 
-* When a profile is created we should also create a user for security. Maybe, security user and profiles could come from the same 
+* For future versions: When a profile is created we should also create a user for security. Maybe, security user and profiles could come from the same 
 table
-* 
+
+## Likes
+I decided to separate likes and profiles, like thet were different contexts (in the sense of DDD). 
+I tried to make Likes dependent of Profiles and avoid any reference from Profiles to Likes. However, there the domain profile has a list of
+likes. I could avoid that by moving the logics of creating likes from Profiles to the use case AddLikedProfilesService
+
+* Input ports
+  * Like listings (ListProfileLikes): 
+    * There are two methods one that lists the likes of a profile (profile as origin) and the
+    other that lists the likes with the profile as target, that is, profiles that liked me. 
+    * Both methods produce a very simmilar object: a profile and a list of likes. However, I decide to use different DTO 
+    that have different semantics. One for outgoing likes (ProfileLikes) and another for incoming likes (ReceivedLikes)
+  * Create new likes (AddLikedProfiles)
+    * Only one method
+    * It receives a command with all the information the use case needs.
+  * Note that there are no input ports that return domain Likes (but there are output ports that return domain Likes)
+* Output ports 
+  * Store likes
+  * Load kiles: two interfaces that return domain Like
+  * List profiles: ports intended to list profiles to the user. They list a projection of likes without Profiles object, just their email
+* Services
+  * There is one service/use case to create new likes
+  * The other (input) ports are implemented directly by a persistence adapter (ListProfileLikeAdapter)
+* Adapters
+  * Input adapters
+    * We have two REST adapters. One for listing and another one for creating new likes
+    * Note that the ports to load domain Likes are not used by
+  * Output adapters
+    * ListProfileLikeAdapter is an output adapter and a service at the same time. It implements the listing like input ports (acting like a service)
+    and aldo implements the output ports (for listing) acting as a persistence adapter. Note that both input and output ports have the
+    same methods declared. 
+    * The other adapters are "normal"
+    * All the mappings are done in the output adapters layer

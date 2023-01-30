@@ -11,7 +11,15 @@ POST http://localhost:8080/login
 %}
 
 ### get josep@tecnocampus.cat
-GET http://localhost:8080/profiles/josep@tecnocampus.cat
+GET http://localhost:8080/profiles/email/josep@tecnocampus.cat
+Authorization: {{auth_token}}
+
+### get unknown@tecnocampus.cat
+GET http://localhost:8080/profiles/email/unknown@tecnocampus.cat
+Authorization: {{auth_token}}
+
+### get profiles me
+GET http://localhost:8080/profiles/me
 Authorization: {{auth_token}}
 
 ### get all profiles
@@ -40,6 +48,7 @@ Content-Type: application/json
   "attraction": "Woman",
   "passion": "Sport"
 }
+
 
 
 ###

@@ -5,7 +5,9 @@ import cat.tecnocampus.tinder.likes.application.service.exception.LikeNotFoundEx
 import cat.tecnocampus.tinder.likes.domain.Like;
 import cat.tecnocampus.tinder.profiles.adapter.out.persistence.MapperProfileProfileEntity;
 import cat.tecnocampus.tinder.profiles.domain.Profile;
+import org.springframework.stereotype.Component;
 
+@Component
 public class LoadLikeByOriginAndDestinationAdapter implements LoadLikeByOriginAndDestinationPort {
     private final LikeRepository likeRepository;
 

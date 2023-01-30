@@ -1,4 +1,4 @@
-package cat.tecnocampus.tinder.profiles.adapter.in.web.frontendException;
+package cat.tecnocampus.tinder.common.exceptionAdvice;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.FieldError;

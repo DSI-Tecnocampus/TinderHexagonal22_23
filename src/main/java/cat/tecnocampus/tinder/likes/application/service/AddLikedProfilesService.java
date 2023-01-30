@@ -3,6 +3,7 @@ package cat.tecnocampus.tinder.likes.application.service;
 import cat.tecnocampus.tinder.likes.application.port.in.AddLikedProfiles;
 import cat.tecnocampus.tinder.likes.application.port.in.AddLikedProfilesCommand;
 import cat.tecnocampus.tinder.likes.application.port.out.LoadLikeByOriginAndDestinationPort;
+import cat.tecnocampus.tinder.likes.application.port.out.LoadLikesByOriginPort;
 import cat.tecnocampus.tinder.likes.application.port.out.StoreLikesPort;
 import cat.tecnocampus.tinder.likes.domain.Like;
 import cat.tecnocampus.tinder.profiles.application.port.in.ProfileListing;
@@ -22,15 +23,20 @@ class AddLikedProfilesService implements AddLikedProfiles {
     private final ListProfilePort listProfilePort;
     private final StoreLikesPort storeLikesPort;
     private final LoadLikeByOriginAndDestinationPort loadLikeByOriginAndDestinationPort;
+    private final LoadLikesByOriginPort loadLikesByOriginPort;
 
     AddLikedProfilesService(ListProfilePort listProfilePort, StoreLikesPort storeLikesPort,
-                            LoadLikeByOriginAndDestinationPort loadLikeByOriginAndDestinationPort) {
+                            LoadLikeByOriginAndDestinationPort loadLikeByOriginAndDestinationPort,
+                            LoadLikesByOriginPort loadLikesByOriginPort) {
         this.listProfilePort = listProfilePort;
         this.storeLikesPort = storeLikesPort;
         this.loadLikeByOriginAndDestinationPort = loadLikeByOriginAndDestinationPort;
+
+        this.loadLikesByOriginPort = loadLikesByOriginPort;
     }
 
     @Override
+    @Transactional
     public void AddLikedProfiles(AddLikedProfilesCommand command) {
         ProfileListing originListing = listProfilePort.loadProfileByEmail(command.origin())
                 .orElseThrow(() -> new ProfileNotFound(command.origin()));
@@ -39,6 +45,7 @@ class AddLikedProfilesService implements AddLikedProfiles {
                 command.targets().stream().map(email -> listProfilePort.loadProfileByEmail(email).orElseThrow(() -> new ProfileNotFound(email)))
                         .map(MapperProfileProfileListing::profileListingToProfile)
                         .filter(origin::isCompatible) 			//make sure it is compatible
+                        .map(this::loadTargetLikes)
                         .map(origin::createAndMatchLike)		//create likes
                         .collect(Collectors.toList());
         origin.addLikes(likes);
@@ -53,4 +60,9 @@ class AddLikedProfilesService implements AddLikedProfiles {
                 .map(Like::match).collect(Collectors.toList());
     }
 
+    private Profile loadTargetLikes(Profile target) {
+        target.setLikes(loadLikesByOriginPort.listLikesByOrigin(target));
+
+        return target;
+    }
 }

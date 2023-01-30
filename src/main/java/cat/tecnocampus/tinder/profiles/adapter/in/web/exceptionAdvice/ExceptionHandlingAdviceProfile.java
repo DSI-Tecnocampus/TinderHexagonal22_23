@@ -1,4 +1,4 @@
-package cat.tecnocampus.tinder.profiles.adapter.in.web.frontendException;
+package cat.tecnocampus.tinder.profiles.adapter.in.web.exceptionAdvice;
 
 import cat.tecnocampus.tinder.profiles.application.service.exception.ProfileAlreadyExists;
 import cat.tecnocampus.tinder.profiles.application.service.exception.ProfileNotFound;
@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ControllerAdvice
-public class ExceptionHandlingAdvice {
+public class ExceptionHandlingAdviceProfile {
 
     @ResponseBody
     @ExceptionHandler(ProfileNotFound.class)
@@ -18,11 +18,11 @@ public class ExceptionHandlingAdvice {
         return ex.getMessage();
     }
 
-    @ExceptionHandler(ProfileAlreadyExists.class)
     @ResponseBody
-    @ResponseStatus(HttpStatus.CONFLICT)
-    String objectAlreadyExists(Exception exception) {
-        return exception.getMessage();
+    @ExceptionHandler(ProfileAlreadyExists.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    String profileAlreadyExists(Exception ex) {
+        return ex.getMessage();
     }
 
 }

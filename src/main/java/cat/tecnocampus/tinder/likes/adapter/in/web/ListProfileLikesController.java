@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.security.Principal;
-import java.util.List;
 
 @RestController
 class ListProfileLikesController {
@@ -18,12 +17,12 @@ class ListProfileLikesController {
     }
 
     @GetMapping("/profiles/me/likes")
-    public List<ProfileLikes> listOriginLikes(Principal principal) {
+    public ProfileLikes listOriginLikes(Principal principal) {
         return listProfileLikes.listProfileLikes(principal.getName());
     }
 
     @GetMapping("/profiles/me/likedTo")
-    public List<ReceivedLikes> listTargetLikes(Principal principal) {
+    public ReceivedLikes listTargetLikes(Principal principal) {
         return listProfileLikes.listReceivedLikes(principal.getName());
     }
 }
