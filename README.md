@@ -83,7 +83,8 @@ likes. I could avoid that by moving the logics of creating likes from Profiles t
     * The other adapters are "normal"
     * All the mappings are done in the output adapters layer
     
-* Quotes: we will use a huge shortcut since this part of the application only needs to get some quotes from another REST API with no logic 
+## Quotes
+We will use a huge shortcut since this part of the application only needs to get some quotes from another REST API with no logic 
 
 Make sure you have running on your machine the **quoter** application (running in the default localhost port, 80). Get the application from
   https://github.com/LabInternetPub/quoters and add *server.port=80* to the application.properties file.
