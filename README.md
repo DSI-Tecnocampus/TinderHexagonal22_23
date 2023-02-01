@@ -82,3 +82,14 @@ likes. I could avoid that by moving the logics of creating likes from Profiles t
     same methods declared. 
     * The other adapters are "normal"
     * All the mappings are done in the output adapters layer
+    
+* Quotes: we will use a huge shortcut since this part of the application only needs to get some quotes from another REST API with no logic 
+
+Make sure you have running on your machine the **quoter** application (running in the default localhost port, 80). Get the application from
+  https://github.com/LabInternetPub/quoters and add *server.port=80* to the application.properties file.
+  * Input ports: quotes "module" has only input ports where we define the ports (what the application offers) and the DTOs (the information structure) being used for the quotes.
+  Note that the application *layer* has not other ports or services
+  * Input adapters: it's the rest controller that uses the input ports
+  * Output adapter: the adapters that, using a webClient, calls the **quoters** REST application
+  * Note that the configuration of the webClient is situated in the "general" configuration package. We could have decided to have in this "module" 
+  another *configuration* package with the "local" configurations that are only used in this "module".
